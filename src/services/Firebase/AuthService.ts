@@ -1,18 +1,64 @@
-import { db } from "./FireBaseConfig";
-import { UserIdentity } from "@supabase/supabase-js";
-import user
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    updateProfile,
+    onAuthStateChanged,
+    User
+  } from "firebase/auth";
+  import { auth } from "./FireBaseConfig";
+  
+  export async function registerUser(
+    email: string,
+    password: string,
+    username: string
+  ): Promise<{ success: boolean; user?: User; error?: any }> {
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const user = cred.user;
+      await updateProfile(user, { displayName: username });
+      localStorage.setItem("userId", user.uid);
+      localStorage.setItem("username", username);
+      return { success: true, user };
+    } catch (err: any) {
+      console.error("🔥 registerUser error:", err.code, err.message);
+      return { success: false, error: err };
+    }
+  }
+  
+  export async function loginUser(
+    email: string,
+    password: string
+  ): Promise<{ success: boolean; user?: User; error?: any }> {
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const user = cred.user;
+      localStorage.setItem("userId", user.uid);
+      if (user.displayName) localStorage.setItem("username", user.displayName);
+      return { success: true, user };
+    } catch (err: any) {
+      console.error("🔥 loginUser error:", err.code, err.message);
+      return { success: false, error: err };
+    }
+  }
+  
+  export async function logoutUser(): Promise<{ success: boolean; error?: any }> {
+    try {
+      await signOut(auth);
+      localStorage.clear();
+      return { success: true };
+    } catch (err: any) {
+      console.error("🔥 logoutUser error:", err.code, err.message);
+      return { success: false, error: err };
+    }
+  }
+  
+  export function onAuthChange(
+    callback: (user: User | null) => void
+  ) {
+    return onAuthStateChanged(auth, callback);
+  }
 
-
-export async function fetchUsers(): Promise<UserType[]> {
-    const usersRef = UserIdentity(db, "users");
-    const snapshot = await getDocs(usersRef);
-    const users: UserIdentity[] = snapshot.docs.map(usersRef => {
-        const data = doc.data();
-        return {
-            ...data,
-            id: doc.id,
-            username: data.username || "Unknown",
-        };
-    });
-    return users;
-}
+  //? Aqui si copie y pegue lo de Kevin ya no sabia mas que hacer
+  
+  

@@ -63,9 +63,9 @@ class PolockRoot extends HTMLElement {
   }
 
   private updateView() {
-    const route = window.location.hash.slice(1) || "home";
+    const route = window.location.hash.slice(1) || "Inicio";
     const container = this.shadowRoot!.querySelector("#main-content")!;
-    container.innerHTML = "";
+    container.innerHTML = "register-page";
 
     switch (route) {
       case "upload":

@@ -24,7 +24,7 @@ class UploadBox extends HTMLElement {
     fileInput.addEventListener("change", () => {
       const selected = Array.from(fileInput.files || []).filter(f => f.size > 0);
       this.files = selected;
-      this.message = selected.length === 0 ? "No has subido nada 😅" : "";
+      this.message = selected.length === 0 ? "No has subido nada XD" : "";
       this.updateMessage();
       this.showPreviews(this.files, previewArea);
     });
@@ -33,7 +33,7 @@ class UploadBox extends HTMLElement {
       e.preventDefault();
 
       if (this.files.length === 0) {
-        this.message = "No has subido nada 😅";
+        this.message = "No has subido nada XD";
         this.updateMessage();
         return;
       }

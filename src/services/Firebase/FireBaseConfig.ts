@@ -45,6 +45,6 @@ const loginUser = async (email: string, password: string) => {
 };
 
 
-
+export {registerUser , loginUser}
 export const auth = getAuth(app);
 export const db = getFirestore(app);
